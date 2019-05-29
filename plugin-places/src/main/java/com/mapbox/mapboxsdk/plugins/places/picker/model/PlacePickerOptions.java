@@ -37,10 +37,13 @@ public abstract class PlacePickerOptions implements BasePlaceOptions, Parcelable
 
   public abstract boolean includeDeviceLocationButton();
 
+  public abstract boolean includeSearch();
+
   public static Builder builder() {
     return new AutoValue_PlacePickerOptions.Builder()
         .includeReverseGeocode(true)
-        .includeDeviceLocationButton(false);
+        .includeDeviceLocationButton(false)
+        .includeSearch(false);
   }
 
   @AutoValue.Builder
@@ -66,7 +69,7 @@ public abstract class PlacePickerOptions implements BasePlaceOptions, Parcelable
      * geocoding information associated with coordinates at the center of the map. A new
      * geocoding call is made every time the map is moved when true is passed through
      * includeReverseGeocode().
-     *
+
      * @param includeReverseGeocode whether or not to make a reverse geocoding call to
      *                              retrieve and display information associated with
      *                              the picked location's coordinates. Defaults to true.
@@ -86,6 +89,14 @@ public abstract class PlacePickerOptions implements BasePlaceOptions, Parcelable
      * @return this builder instance for chaining options together
      */
     public abstract Builder includeDeviceLocationButton(boolean includeDeviceLocationButton);
+
+    /**
+     * @param includeSearch whether or not to include autocomplete geocoding search
+     *                      field with the Place Picker UI. Defaults to false.
+     *
+     * @return this builder instance for chaining options together
+     */
+    public abstract Builder includeSearch(boolean includeSearch);
 
     public abstract PlacePickerOptions build();
   }
