@@ -1,9 +1,11 @@
 MBGL_ANDROID_PLUGINS += traffic;plugin-traffic
-MBGL_ANDROID_PLUGINS += locationlayer;plugin-locationlayer
 MBGL_ANDROID_PLUGINS += building;plugin-building
 MBGL_ANDROID_PLUGINS += offline;plugin-offline
 MBGL_ANDROID_PLUGINS += places;plugin-places
+MBGL_ANDROID_PLUGINS += annotation;plugin-annotation
 MBGL_ANDROID_PLUGINS += localization;plugin-localization
+MBGL_ANDROID_PLUGINS += markerview;plugin-markerview
+MBGL_ANDROID_PLUGINS += scalebar;plugin-scalebar
 
 checkstyle:
 	./gradlew checkstyle
@@ -21,6 +23,9 @@ javadoc:
 
 publish:
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew bintrayUpload
+
+publish-snapshot:
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew artifactoryPublish
 
 publish-local:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
@@ -50,11 +55,14 @@ javadoc-$1:
 	./gradlew :$2:javadocrelease
 
 publish-$1:
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :$2:uploadArchives
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :$2: bintrayUpload
+
+publish-snapshot-$1:
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :$2: artifactoryPublish
 
 publish-local-$1:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
-	export IS_LOCAL_DEVELOPMENT=true; ./gradlew :$2:uploadArchives
+	export IS_LOCAL_DEVELOPMENT=true; ./gradlew :$2: bintrayUpload
 
 endef
 

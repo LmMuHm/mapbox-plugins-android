@@ -106,11 +106,60 @@ jobs:
       - deploy:
           name: Publish Plugins SDK to Bintray
           command: |
-            if [ -n "${BINTRAY_USER}" ]; then
-              if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                make publish
+            if [[ $CIRCLE_BRANCH == master ]] || [[ $CIRCLE_BRANCH == release-* ]] || [[ $CIRCLE_TAG == v*- ]]; then
+                if [[ $version != *"SNAPSHOT"* ]]; then
+                  if [ "${CIRCLE_TAG}" == "v*-annotation" ]; then
+                    make publish-annotation
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-localization" ]; then
+                    make publish-localization
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-building" ]; then
+                    make publish-building
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-markerview" ]; then
+                    make publish-markerview
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-offline" ]; then
+                    make publish-offline
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-places" ]; then
+                    make publish-places
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-scalebar" ]; then
+                    make publish-scalebar
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-traffic" ]; then
+                    make publish-traffic
+                  fi
+                else
+                  if [ "${CIRCLE_TAG}" == "v*-annotation" ]; then
+                    make publish-snapshot-annotation
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-localization" ]; then
+                    make publish-snapshot-localization
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-building" ]; then
+                    make publish-snapshot-building
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-markerview" ]; then
+                    make publish-snapshot-markerview
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-offline" ]; then
+                    make publish-snapshot-offline
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-places" ]; then
+                    make publish-snapshot-places
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-scalebar" ]; then
+                    make publish-snapshot-scalebar
+                  fi
+                  if [ "${CIRCLE_TAG}" == "v*-traffic" ]; then
+                    make publish-snapshot-traffic
+                  fi
               fi
             fi
+
       - store_artifacts:
           path: app/build/reports
           destination: reports
