@@ -31,10 +31,11 @@ allprojects {
 subprojects {
   apply plugin: 'idea'
   apply from: "${rootDir}/gradle/dependencies.gradle"
+  apply plugin: "com.jfrog.artifactory"
 }
 
 task clean(type: Delete) {
   delete rootProject.buildDir
 }
 
-apply plugin: "com.jfrog.artifactory"
+//apply plugin: "com.jfrog.artifactory"

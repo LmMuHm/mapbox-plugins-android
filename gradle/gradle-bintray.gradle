@@ -15,7 +15,11 @@ publishing {
             afterEvaluate {
                 artifact("$buildDir/outputs/aar/${project.name}-release.aar")
                 artifact(androidSourcesJar)
-                artifact(androidJavadocsJar)
+//                artifact(androidJavadocsJar)
+
+                artifact (androidJavadocsJar) {
+                    classifier = 'javadoc'
+                }
             }
 
             pom.withXml {
@@ -83,20 +87,30 @@ artifactory {
     }
 }
 
+task androidSourcesJar(type: Jar) {
+    classifier "sources"
+    from android.sourceSets.main.java.srcDirs
+}
+
 task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.sourceFiles
+    /*source = android.sourceSets.main.java.sourceFiles
     classpath = files(android.bootClasspath)
-    failOnError = false
+    failOnError = false*/
+
+
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompile.classpath
+        }
+    }
+
 }
 
 task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
     classifier = 'javadoc'
     from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
 }
 
 tasks.withType(Javadoc) {
@@ -117,40 +131,3 @@ afterEvaluate { project ->
         }
     }
 }
-/*
-
-
-
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    classifier = 'dokka'
-    from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-
-artifacts {
-    archives androidSourcesJar
-    archives androidJavadocsJar
-}
-}
-
-
-
-// See: https://github.com/chrisbanes/gradle-mvn-push/issues/43#issuecomment-84140513
-afterEvaluate { project ->
-    android.libraryVariants.all { variant ->
-        tasks.androidJavadocs.doFirst {
-            classpath += files(variant.javaCompile.classpath.files)
-            classpath += configurations.javadocDeps
-        }
-    }
-}
-*/
