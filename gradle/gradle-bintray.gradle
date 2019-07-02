@@ -85,7 +85,6 @@ artifactory {
 
 task androidSourcesJar(type: Jar) {
     classifier "sources"
-    extension "aar"
     from android.sourceSets.main.java.srcDirs
 }
 
@@ -111,10 +110,10 @@ tasks.withType(Javadoc) {
     options.addStringOption('charset', 'UTF-8')
 }
 
-/*artifacts {
+artifacts {
     archives androidSourcesJar
     archives androidJavadocsJar
-}*/
+}
 
 afterEvaluate { project ->
     android.libraryVariants.all { variant ->
