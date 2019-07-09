@@ -51,6 +51,10 @@ public final class DataRepository {
     return observableSearchHistory;
   }
 
+  public void deleteAllHistoryData(){
+    SearchHistoryDatabase.deleteAllData(database);
+  }
+
   public void addSearchHistoryEntity(SearchHistoryEntity searchHistory) {
     SearchHistoryDatabase.insertData(database, searchHistory);
   }
